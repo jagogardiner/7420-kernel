@@ -40,11 +40,11 @@
 #ifdef CONFIG_STATE_NOTIFIER
 #include <linux/state_notifier.h>
 #endif
+<<<<<<< HEAD
 
 #ifdef CONFIG_POWERSUSPEND
 #include <linux/powersuspend.h>
 #endif
-
 #include <mach/regs-clock.h>
 #include <mach/exynos-pm.h>
 #include <media/exynos_mc.h>
