@@ -2744,6 +2744,48 @@ static int s6e3ha3_wqhd_exitalpm(struct dsim_device *dsim)
 
 	ret = dsim_write_hl_data(dsim, SEQ_DISPLAY_OFF, ARRAY_SIZE(SEQ_DISPLAY_OFF));
 	if (ret < 0) {
+		dsim_err("%s : fail to write CMD : SEQ_DISPLAY_OFF\n", __func__);
+	}
+	msleep(20);
+
+	ret = dsim_write_hl_data(dsim, SEQ_TEST_KEY_ON_F0, ARRAY_SIZE(SEQ_TEST_KEY_ON_F0));
+	if (ret < 0) {
+		dsim_err("%s : fail to write CMD : SEQ_TEST_KEY_ON_F0\n", __func__);
+	}
+	ret = dsim_write_hl_data(dsim, SEQ_TEST_KEY_ON_FC, ARRAY_SIZE(SEQ_TEST_KEY_ON_FC));
+	if (ret < 0) {
+		dsim_err("%s : fail to write CMD : SEQ_TEST_KEY_ON_FC\n", __func__);
+	}
+
+	ret = s6e3ha3_wqhd_setalpm(dsim, panel->alpm_mode);
+	if (ret < 0) {
+		dsim_err("%s : failed to set alpm\n", __func__);
+	}
+	ret = dsim_write_hl_data(dsim, SEQ_TEST_KEY_OFF_F0, ARRAY_SIZE(SEQ_TEST_KEY_OFF_F0));
+	if (ret < 0) {
+		dsim_err("%s : fail to write CMD : SEQ_TEST_KEY_OFF_F0\n", __func__);
+	}
+	ret = dsim_write_hl_data(dsim, SEQ_TEST_KEY_OFF_FC, ARRAY_SIZE(SEQ_TEST_KEY_OFF_FC));
+	if (ret < 0) {
+		dsim_err("%s : fail to write CMD : SEQ_TEST_KEY_OFF_FC\n", __func__);
+	}
+	return ret;
+}
+
+static int s6e3ha3_wqhd_exitalpm(struct dsim_device *dsim)
+{
+	int ret = 0;
+	struct panel_private *panel = &dsim->priv;
+
+	dsim_info("%s was called\n", __func__);
+
+	if (panel->state == PANEL_STATE_SUSPENED) {
+		dsim_err("ERR:%s:panel is not active\n", __func__);
+		return ret;
+	}
+
+	ret = dsim_write_hl_data(dsim, SEQ_DISPLAY_OFF, ARRAY_SIZE(SEQ_DISPLAY_OFF));
+	if (ret < 0) {
 		dsim_err("%s : fail to write CMD : DISPLAY_OFF\n", __func__);
 	}
 	msleep(20);
@@ -2758,6 +2800,7 @@ static int s6e3ha3_wqhd_exitalpm(struct dsim_device *dsim)
 		dsim_err("%s : fail to write CMD : SEQ_TEST_KEY_ON_FC\n", __func__);
 	}
 
+>>>>>>> c1b4eb86c... Support AOD
 	ret = dsim_write_hl_data(dsim, SEQ_ALPM_OFF, ARRAY_SIZE(SEQ_ALPM_OFF));
 	if (ret < 0) {
 		dsim_err("%s : fail to write CMD : SEQ_ALPM_OFF\n", __func__);
