@@ -162,7 +162,6 @@
 		};
 	};
 
-<<<<<<< HEAD
 	dwmmc1@15750000 {
 		status = "disabled";
 		num-slots = <1>;
@@ -202,8 +201,6 @@
 		};
 	};
 
-=======
->>>>>>> 5928d1c49... drivers: fix AOD
 	dwmmc2@15560000 {
 		status = "okay";
 		num-slots = <1>;
@@ -1033,10 +1030,7 @@
 			#dma-channels = <8>;
 			#dma-requests = <16>;
 			#dma-mcode-addr = <0x03046000>;
-<<<<<<< HEAD
 			#dma-multi-irq = <1>;
-=======
->>>>>>> 5928d1c49... drivers: fix AOD
 			samsung,lpass-subip;
 			status = "ok";
 		};

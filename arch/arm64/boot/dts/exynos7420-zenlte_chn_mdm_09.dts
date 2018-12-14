@@ -11,11 +11,7 @@
 
 /dts-v1/;
 #include "exynos7420-zenlte_common.dtsi"
-<<<<<<< HEAD
 #include "exynos7420-zenlte_chn_cdma_battery_09.dtsi"
-=======
-#include "exynos7420-zenlte_usa_cdma_battery_09.dtsi"
->>>>>>> 5928d1c49... drivers: fix AOD
 #include "exynos7420-zenlte_gpio_chn_mdm_09.dtsi"
 #include "exynos7420-zenlte_modem-mdm9x35.dtsi"
 #include "exynos7420-zenlte_fingerprint-sensor_00.dtsi"

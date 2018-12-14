@@ -96,11 +96,7 @@
 	};
 
 	chosen {
-<<<<<<< HEAD
 		bootargs = "console=ram ess_setup=0x46000000 androidboot.hardware=samsungexynos7420 androidboot.selinux=permissive";
-=======
-		bootargs = "console=ttySAC2,115200n8 ess_setup=0x46000000 androidboot.selinux=permissive";
->>>>>>> 5928d1c49... drivers: fix AOD
 		linux,initrd-start = <0x42000000>;
 		linux,initrd-end = <0x420FFFFF>;
 	};
@@ -167,7 +163,6 @@
 		};
 	};
 
-<<<<<<< HEAD
 	dwmmc1@15750000 {
 		status = "disabled";
 		num-slots = <1>;
@@ -213,13 +208,6 @@
 		caps-control;
 		supports-highspeed;
 		supprots-sdr50-mode;
-=======
-	dwmmc2@15560000 {
-		status = "okay";
-		num-slots = <1>;
-		supports-highspeed;
-		supports-sdr50-mode;
->>>>>>> 5928d1c49... drivers: fix AOD
 		supports-sdr104-mode;
 		enable-cclk-on-suspend;
 		cd-type = <1>;
@@ -238,11 +226,7 @@
 		fix-fmp-size-mismatch;
 		not-allow-single-dma;
 		samsung,dw-mshc-ciu-div = <3>;
-<<<<<<< HEAD
 		samsung,dw-mshc-sdr-timing = <3 0 2 1>;
-=======
-		samsung,dw-mshc-sdr-timing = <3 0 2 0>;
->>>>>>> 5928d1c49... drivers: fix AOD
 		samsung,dw-mshc-ddr-timing = <3 0 2 1>;
 		samsung,dw-mshc-sdr50-timing = <3 0 3 2>;
 		samsung,dw-mshc-sdr104-timing = <3 0 3 1>;
@@ -1682,10 +1666,7 @@
 			#dma-channels = <8>;
 			#dma-requests = <16>;
 			#dma-mcode-addr = <0x03047000>;
-<<<<<<< HEAD
 			#dma-multi-irq = <1>;
-=======
->>>>>>> 5928d1c49... drivers: fix AOD
 			samsung,lpass-subip;
 			status = "ok";
 		};
