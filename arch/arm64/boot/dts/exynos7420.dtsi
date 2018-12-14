@@ -1014,11 +1014,7 @@
 		clocks = <&clock 180>, <&clock 187>, <&clock 186>;
 		clock-names = "biu", "dout_mmc_a", "gate_ciu";
 		status = "disabled";
-<<<<<<< HEAD
 	};
-=======
-	 };
->>>>>>> 5928d1c49... drivers: fix AOD
 
 	dwmmc_2: dwmmc2@15560000 {
 		compatible = "samsung,exynos7420-dw-mshc";
