@@ -29,7 +29,7 @@ echo ""
 echo -e "${bldgrn} Clean up ${txtrst}"
 make clean
 make mrproper
-rm -rf out
+sudo rm -rf out
 echo ""
 
 # Prompt the user what they are building for
@@ -63,18 +63,18 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
 
   # Copy files to /out for easier access
   echo -e "${bldgrn} Copying files to ./out ${txtrst}"
-  mkdir -p /out/system/lib/modules
+  mkdir -p ${KERNELDIR}/out/
   echo ""
 
   # Copy zImage
-  cp /arch/arm64/boot/Image /out/Image
+  sudo cp $KERNELDIR/arch/arm64/boot/Image $KERNELDIR/out/Image
 
   # Prompt user if they wish to create a dt.img
   cd ${KERNELDIR}/out
   while true; do
       read -p "${bldblu} Do you want to create a dt.img? (yes, no) ${txtrst}" yn
       case $yn in
-          [yes]* ) ${SCRIPTS}/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/; break;;
+          [yes]* ) ${SCRIPTS}/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ${KERNELDIR}/arch/arm64/boot/dts/; break;;
           [no]* ) break;;
           * ) echo "${bldred} Please answer yes/no! ${txtrst}"; echo "";;
       esac
