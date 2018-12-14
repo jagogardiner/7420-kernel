@@ -19,7 +19,7 @@ echo ""
 
 # Set exports for later script use
 echo -e "${bldgrn} Setting exports ${txtrst}"
-export KERNELDIR=/home/nysadev/xeriumO/
+export KERNELDIR=/home/nysadev/xeriumO
 export SCRIPTS=/home/nysadev/xeriumO/xscripts
 export ARCH=arm64
 export CROSS_COMPILE=/home/nysadev/aarch64-linux-android-4.9/bin/aarch64-linux-android-
@@ -68,9 +68,6 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
 
   # Copy zImage
   cp /arch/arm64/boot/Image /out/Image
-
-  # Copy all modules if compiled
-  find -name '*.ko' | xargs -I {} cp {} ./out/system/lib/modules/
 
   # Prompt user if they wish to create a dt.img
   cd ${KERNELDIR}/out
