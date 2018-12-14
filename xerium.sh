@@ -2,10 +2,6 @@
 
 # XeriumO build script
 
-echo -e "${bldcya} Xerium kernel for the S6 ${txtrst}"
-echo -e "${bldred} Note: if you are not running as sudo you should be! ${txtrst}"
-echo ""
-
 # Colorize and add text parameters
 red=$(tput setaf 1) # red
 grn=$(tput setaf 2) # green
@@ -16,6 +12,10 @@ bldgrn=${txtbld}$(tput setaf 2) # green
 bldblu=${txtbld}$(tput setaf 4) # blue
 bldcya=${txtbld}$(tput setaf 6) # cyan
 txtrst=$(tput sgr0) # Reset
+
+echo -e "${bldcya} Xerium kernel for the S6 ${txtrst}"
+echo -e "${bldred} Note: if you are not running as sudo you should be! ${txtrst}"
+echo ""
 
 # Set exports for later script use
 echo -e "${bldgrn} Setting exports ${txtrst}"
@@ -57,7 +57,7 @@ make -j$(nproc --all)
 echo ""
 
 # Check for zImage, then compile into boot.img
-if [[ -a arch/arm64/boot/zImage ]]; then
+if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   echo -e "${bldgrn} Making zip for ${device}"
   echo ""
 
@@ -67,7 +67,7 @@ if [[ -a arch/arm64/boot/zImage ]]; then
   echo ""
 
   # Copy zImage
-  cp /arch/arm64/boot/zImage /out/zImage
+  cp /arch/arm64/boot/Image /out/Image
 
   # Copy all modules if compiled
   find -name '*.ko' | xargs -I {} cp {} ./out/system/lib/modules/
@@ -96,9 +96,9 @@ if [[ -a arch/arm64/boot/zImage ]]; then
       read -p "${bldblu} Do you want to use a stock or custom built dt.img? (s, c) ${txtrst}" yn
       case $yn in
           # Stock
-          [s]* ) ./mkbootimg --kernel ${KERNELDIR}/out/zImage --dt ${KERNELDIR}/dt.img --ramdisk ${KERNELDIR}/out/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/boot.img; break;;
+          [s]* ) ./mkbootimg --kernel ${KERNELDIR}/out/Image --dt ${KERNELDIR}/dt.img --ramdisk ${KERNELDIR}/out/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/boot.img; break;;
           # Custom
-          [c]* ) ./mkbootimg --kernel ${KERNELDIR}/out/zImage --dt ${KERNELDIR}/out/dt.img --ramdisk ${KERNELDIR}/out/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/boot.img; break;;
+          [c]* ) ./mkbootimg --kernel ${KERNELDIR}/out/Image --dt ${KERNELDIR}/out/dt.img --ramdisk ${KERNELDIR}/out/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/boot.img; break;;
           * ) echo "${bldred} Please answer s/c! ${txtrst}"; echo "";;
       esac
   done
