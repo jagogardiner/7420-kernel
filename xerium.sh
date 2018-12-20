@@ -22,7 +22,7 @@ echo -e "${bldgrn} Setting exports ${txtrst}"
 export KERNELDIR=/home/nysadev/xeriumO
 export SCRIPTS=/home/nysadev/xeriumO/xscripts
 export ARCH=arm64
-export CROSS_COMPILE=/home/nysadev/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+export CROSS_COMPILE=/home/nysadev/aarch64-linux-android-6.x/bin/aarch64-linux-android-
 echo ""
 
 # Clean up
@@ -104,8 +104,8 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   # Make archive
   echo -e "${bldgrn} Creating flashable .zip ${txtrst}"
   mkdir -p ${KERNELDIR}/out/${device}
-  cp -R ${KERNELDIR}/META-INF ${KERNELDIR}/out/${device}
-  cp -R ${KERNELDIR}/out/boot.img ${KERNELDIR}/out/${device}
+  cp -R ${KERNELDIR}/META-INF ${KERNELDIR}/out/${device}/
+  cp -R ${KERNELDIR}/out/boot.img ${KERNELDIR}/out/${device}/
 
   cd ${KERNELDIR}/out/${device}
   zip -r xeriumO-${device}-`date +[%d-%m-%y]`.zip .
