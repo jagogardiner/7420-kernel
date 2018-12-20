@@ -15,6 +15,7 @@ import /init.container.rc
 import /init.wifi.rc
 
 on early-init
+
     # Set init and its forked children's oom_adj.
     write /proc/1/oom_score_adj -1000
 
@@ -302,7 +303,7 @@ on init
     # This allows the ledtrig-transient properties to be created here so
     # that they can be chown'd to system:system later on boot
     write /sys/class/leds/vibrator/trigger "transient"
-
+    setenv LD_PRELOAD "/system/lib/libexynosgrallocwrapper.so"
     # disable klogd to avoid interrupting 'cat /proc/kmsg' by reading /proc/kmsg simultaneously
     # setprop logd.kernel false
 
