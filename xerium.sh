@@ -27,8 +27,8 @@ echo ""
 
 # Clean up
 echo -e "${bldgrn} Clean up ${txtrst}"
-make clean
-make mrproper
+sudo make clean
+sudo make mrproper
 sudo rm -rf out
 echo ""
 
@@ -43,6 +43,8 @@ while true; do
         * ) echo "${bldred} Please answer flat or edge! ${txtrst}"; echo "";;
     esac
 done
+mkdir -p ${KERNELDIR}/out/${device}
+mkdir -p ${KERNELDIR}/out/${device}/temp
 echo ""
 
 # Make configuration
@@ -63,14 +65,13 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
 
   # Copy files to /out for easier access
   echo -e "${bldgrn} Copying files to ./out ${txtrst}"
-  mkdir -p ${KERNELDIR}/out
   echo ""
 
   # Copy zImage
-  sudo cp $KERNELDIR/arch/arm64/boot/Image $KERNELDIR/out/Image
+  sudo cp $KERNELDIR/arch/arm64/boot/Image $KERNELDIR/out/$device/temp/Image
 
   # Prompt user if they wish to create a dt.img
-  cd ${KERNELDIR}/out
+  cd ${KERNELDIR}/out/$device/temp
   while true; do
       read -p "${bldblu} Do you want to create a dt.img? (yes, no) ${txtrst}" yn
       case $yn in
@@ -84,7 +85,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   # Pack ramdisk up
   echo -e "${bldgrn} Packing ramdisk ${txtrst}"
   cd ${SCRIPTS}
-  ./mkbootfs ${KERNELDIR}/${device}/ramdisk | gzip > ${KERNELDIR}/out/ramdisk.gz
+  ./mkbootfs ${KERNELDIR}/${device}/ramdisk | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
   echo ""
 
   # Prompt the user if they want to use a stock dt.img, or custom made from earlier.
@@ -93,9 +94,9 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
       read -p "${bldblu} Do you want to use a stock or custom built dt.img? (s, c) ${txtrst}" yn
       case $yn in
           # Stock
-          [s]* ) ./mkbootimg --kernel ${KERNELDIR}/out/Image --dt ${KERNELDIR}/dt.img --ramdisk ${KERNELDIR}/out/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/boot.img; break;;
+          [s]* ) ./mkbootimg --kernel ${KERNELDIR}/out/$device/temp/Image --dt ${KERNELDIR}/dt.img --ramdisk ${KERNELDIR}/out/$device/temp/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/$device/boot.img; break;;
           # Custom
-          [c]* ) ./mkbootimg --kernel ${KERNELDIR}/out/Image --dt ${KERNELDIR}/out/dt.img --ramdisk ${KERNELDIR}/out/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/boot.img; break;;
+          [c]* ) ./mkbootimg --kernel ${KERNELDIR}/out/$device/temp/Image --dt ${KERNELDIR}/out/$device/temp/dt.img --ramdisk ${KERNELDIR}/out/$device/temp/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/$device/boot.img; break;;
           * ) echo "${bldred} Please answer s/c! ${txtrst}"; echo "";;
       esac
   done
@@ -103,12 +104,9 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
 
   # Make archive
   echo -e "${bldgrn} Creating flashable .zip ${txtrst}"
-  mkdir -p ${KERNELDIR}/out/${device}
-  cp -R ${KERNELDIR}/META-INF ${KERNELDIR}/out/${device}/
-  cp -R ${KERNELDIR}/out/boot.img ${KERNELDIR}/out/${device}/
-
+  cp -R ${KERNELDIR}/META-INF ${KERNELDIR}/out/${device}/temp
   cd ${KERNELDIR}/out/${device}
-  zip -r xeriumO-${device}-`date +[%d-%m-%y]`.zip .
+  zip -r xeriumO-${device}-`date +[%d-%m-%y]`.zip . -x \*temp\*
 
   echo -e "${bldcya} DONE! Find the kernel in /out/${device}/*.zip ${txtrst}"
   echo -e "${bldcya} Xerium kernel for the S6 ${txtrst}"
