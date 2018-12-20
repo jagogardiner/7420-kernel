@@ -63,7 +63,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
 
   # Copy files to /out for easier access
   echo -e "${bldgrn} Copying files to ./out ${txtrst}"
-  mkdir -p ${KERNELDIR}/out/
+  mkdir -p ${KERNELDIR}/out
   echo ""
 
   # Copy zImage
