@@ -104,10 +104,10 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
 
   # Make archive
   echo -e "${bldgrn} Creating flashable .zip ${txtrst}"
-  cp -R ${KERNELDIR}/META-INF ${KERNELDIR}/out/${device}/temp
+  cp -R ${KERNELDIR}/META-INF ${KERNELDIR}/out/${device}/
   cd ${KERNELDIR}/out/${device}
   zip -r xeriumO-${device}-`date +[%d-%m-%y]`.zip . -x \*temp\*
-
+  sudo rm -rf ${KERNELDIR}/out/${device}/temp
   echo -e "${bldcya} DONE! Find the kernel in /out/${device}/*.zip ${txtrst}"
   echo -e "${bldcya} Xerium kernel for the S6 ${txtrst}"
   echo -e "${bldcya} Script made by nysadev ${txtrst}"
