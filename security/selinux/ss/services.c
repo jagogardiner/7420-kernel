@@ -773,7 +773,6 @@ out:
 	kfree(t);
 
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
 #if !defined(CONFIG_RKP_KDP)
 	selinux_enforcing = 1;
 #endif
@@ -1538,7 +1537,6 @@ out:
 	kfree(n);
 
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
 #if !defined(CONFIG_RKP_KDP)
 	selinux_enforcing = 1;
 #endif
