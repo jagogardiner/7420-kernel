@@ -303,7 +303,7 @@ on init
     # This allows the ledtrig-transient properties to be created here so
     # that they can be chown'd to system:system later on boot
     write /sys/class/leds/vibrator/trigger "transient"
-    setenv LD_PRELOAD "/system/lib/libexynosgrallocwrapper.so"
+    setenv LD_PRELOAD "/system/vendor/lib/libexynosgrallocwrapper.so"
     # disable klogd to avoid interrupting 'cat /proc/kmsg' by reading /proc/kmsg simultaneously
     # setprop logd.kernel false
 

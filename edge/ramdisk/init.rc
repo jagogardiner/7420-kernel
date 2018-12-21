@@ -305,7 +305,7 @@ on init
 
     # disable klogd to avoid interrupting 'cat /proc/kmsg' by reading /proc/kmsg simultaneously
     # setprop logd.kernel false
-    setenv LD_PRELOAD "/system/lib/libexynosgrallocwrapper.so"
+    setenv LD_PRELOAD "/system/vendor/lib/libexynosgrallocwrapper.so"
 
 # Healthd can trigger a full boot from charger mode by signaling this
 # property when the power button is held.
