@@ -53,42 +53,6 @@ choice
 	  This option sets which CPUFreq governor shall be loaded at
 	  startup. If in doubt, select 'performance'.
 
-config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
-	bool "interactivex"
-	select CPU_FREQ_GOV_INTERACTIVEX
-	help
-		Use the CPUFreq governor 'InteractiveX' as default.
-
-config CPU_FREQ_DEFAULT_GOV_NIGHTMARE
-	bool "nightmare"
-	select CPU_FREQ_GOV_NIGHTMARE
-	help
-		Use the CPUFreq governor 'nightmare' as default.
-
-config CPU_FREQ_DEFAULT_GOV_ONDEMANDX
-	bool "ondemandx"
-	select CPU_FREQ_GOV_ONDEMANDX
-	help
-		Use the CPUFreq governor 'ondemandx' as default.
-
-config CPU_FREQ_DEFAULT_GOV_SMARTASS2
-	bool "smartass2"
-	select CPU_FREQ_GOV_SMARTASS2
-	help
-		Use the CPUFreq governor 'smartass2' as default.
-
-config CPU_FREQ_DEFAULT_GOV_WHEATLEY
-	bool "wheatley"
-	select CPU_FREQ_GOV_WHEATLEY
-	help
-		Use the CPUFreq governor 'weatley' as default.
-
-config CPU_FREQ_DEFAULT_GOV_ZENX
-	bool "zenx"
-	select CPU_FREQ_GOV_ZENX
-	help
-		Use the CPUFreq governor 'zenx' as default.
-
 config CPU_FREQ_DEFAULT_GOV_PERFORMANCE
 	bool "performance"
 	select CPU_FREQ_GOV_PERFORMANCE
@@ -149,42 +113,6 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 	  'interactive' governor for latency-sensitive workloads.
 
 endchoice
-
-config CPU_FREQ_GOV_INTERACTIVEX
-tristate "'interactivex' cpufreq interactivex"
-depends on CPU_FREQ
-help
-'interactivex' – Enhanced with tuned timer parameters to better balance battery vs. performance
-
-config CPU_FREQ_GOV_NIGHTMARE
-tristate "'nightmare' cpufreq nightmare"
-depends on CPU_FREQ
-help
-'nightmare' – A PegasusQ modified, less aggressive and more stable.
-
-config CPU_FREQ_GOV_ONDEMANDX
-tristate "'ondemandx' cpufreq ondemandx"
-depends on CPU_FREQ
-help
-'ondemandx' – This governor is supposed to be a battery friendly ondemand
-
-config CPU_FREQ_GOV_SMARTASS2
-tristate "'smartass2' cpufreq smartass2"
-depends on CPU_FREQ
-help
-'smartass2' – this governor is a balance between performance and battery
-
-config CPU_FREQ_GOV_WHEATLEY
-tristate "'wheatley' cpufreq wheatley"
-depends on CPU_FREQ
-help
-'wheatly' – Building on the classic 'ondemand' governor is implemented Wheatley governor
-
-config CPU_FREQ_GOV_ZENX
-tristate "'zenx' cpufreq zenx"
-depends on CPU_FREQ
-help
-'zenx' – logic for determining which CPU to hotplug is no longer done inside of the hotplug thread
 
 config CPU_FREQ_GOV_PERFORMANCE
 	tristate "'performance' governor"
