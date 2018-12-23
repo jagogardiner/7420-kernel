@@ -37,12 +37,11 @@
 #include <linux/debugfs.h>
 #include <linux/of_gpio.h>
 #include <linux/irq.h>
-#ifdef CONFIG_STATE_NOTIFIER
-#include <linux/state_notifier.h>
-#endif
+
 #ifdef CONFIG_POWERSUSPEND
 #include <linux/powersuspend.h>
 #endif
+
 #include <mach/regs-clock.h>
 #include <mach/exynos-pm.h>
 #include <media/exynos_mc.h>
