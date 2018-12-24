@@ -75,7 +75,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   while true; do
       read -p "${bldblu} Do you want to create a dt.img? (yes, no) ${txtrst}" yn
       case $yn in
-          [yes]* ) ${SCRIPTS}/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ${KERNELDIR}/arch/arm64/boot/dts/; break;;
+          [yes]* ) ${SCRIPTS}/dtbtool -o dt.img -s 2048 -p ${SCRIPTS}/xscripts/dtc/dtc ${KERNELDIR}/arch/arm64/boot/dts/; break;;
           [no]* ) break;;
           * ) echo "${bldred} Please answer yes/no! ${txtrst}"; echo "";;
       esac

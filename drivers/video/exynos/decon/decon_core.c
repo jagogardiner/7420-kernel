@@ -42,6 +42,10 @@
 #include <linux/powersuspend.h>
 #endif
 
+#ifdef CONFIG_POWERSUSPEND
+#include <linux/powersuspend.h>
+#endif
+
 #include <mach/regs-clock.h>
 #include <mach/exynos-pm.h>
 #include <media/exynos_mc.h>
