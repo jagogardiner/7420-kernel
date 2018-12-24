@@ -214,7 +214,6 @@
 #elif GCC_VERSION >= 40902
 #define KASAN_ABI_VERSION 3
 #endif
-
 #endif	/* gcc version >= 40000 specific checks */
 
 #if !defined(__noclone)

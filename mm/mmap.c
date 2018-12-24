@@ -139,7 +139,7 @@ EXPORT_SYMBOL_GPL(vm_memory_committed);
  */
 int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 {
-	unsigned long free, allowed, reserve;
+	long free, allowed, reserve;
 
 	vm_acct_memory(pages);
 
@@ -205,7 +205,7 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 	 */
 	if (mm) {
 		reserve = sysctl_user_reserve_kbytes >> (PAGE_SHIFT - 10);
-		allowed -= min(mm->total_vm / 32, reserve);
+		allowed -= min_t(long, mm->total_vm / 32, reserve);
 	}
 
 	if (percpu_counter_read_positive(&vm_committed_as) < allowed)
@@ -2154,6 +2154,8 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
 
 	/* Guard against wrapping around to address 0. */
 	address &= PAGE_MASK;
+	if (address >= (TASK_SIZE & PAGE_MASK))
+		return -ENOMEM;
 	address += PAGE_SIZE;
 	if (!address)
 		return -ENOMEM;
@@ -2230,7 +2232,7 @@ int expand_downwards(struct vm_area_struct *vma,
 				   unsigned long address)
 {
 	struct vm_area_struct *prev;
-	unsigned long gap_addr;	
+	unsigned long gap_addr;
 	int error;
 
 	address &= PAGE_MASK;

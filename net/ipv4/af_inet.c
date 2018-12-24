@@ -446,6 +446,67 @@ out_rcu_unlock:
 	goto out;
 }
 
+#ifdef CONFIG_KNOX_NCM
+/** The function is used to check if the ncm feature is enabled or not; if enabled then collect the socket meta-data information; **/
+static void knox_collect_metadata(struct socket *sock) {
+    if(check_ncm_flag()) {
+        struct knox_socket_metadata* ksm = kzalloc(sizeof(struct knox_socket_metadata),GFP_KERNEL);
+
+        struct sock *sk = sock->sk;
+        struct inet_sock *inet = inet_sk(sk);
+
+        struct pid *pid_struct;
+        struct task_struct *task;
+
+        struct pid *parent_pid_struct;
+        struct task_struct *parent_task;
+
+        struct timespec close_timespec;
+
+        if(ksm == NULL) return;
+
+        if((sock->ops->family == AF_INET) && (sk->inet_src_masq != 0)) {
+            pid_struct = find_get_pid(current->tgid);
+            task = pid_task(pid_struct,PIDTYPE_PID);
+            if(task != NULL) {
+                memcpy(ksm->process_name,task->comm, sizeof(task->comm));
+                if(task->parent != NULL) {
+                    parent_pid_struct = find_get_pid(task->parent->tgid);
+                    parent_task = pid_task(parent_pid_struct,PIDTYPE_PID);
+                    if(parent_task != NULL) {
+                        memcpy(ksm->parent_process_name,parent_task->comm,sizeof(ksm->parent_process_name));
+                        ksm->knox_puid = parent_task->cred->uid;
+                    }
+                }
+            }
+
+            ksm->srcport = ntohs(inet->inet_sport);
+            ksm->dstport = ntohs(inet->inet_dport);
+
+            sprintf(ksm->srcaddr,"%pI4",(void *)&sk->inet_src_masq);
+            sprintf(ksm->dstaddr,"%pI4",(void *)&inet->inet_daddr);
+
+            ksm->knox_sent = sock->knox_sent;
+            ksm->knox_recv = sock->knox_recv;
+            ksm->knox_uid = sk->knox_uid;
+            ksm->knox_pid = sk->knox_pid;
+            ksm->trans_proto = sk->sk_protocol;
+
+            memcpy(ksm->domain_name,sk->domain_name,sizeof(ksm->domain_name)-1);
+
+            ksm->open_time = sk->open_time;
+
+            close_timespec = current_kernel_time();
+            ksm->close_time = close_timespec.tv_sec;
+
+            insert_data_kfifo_kthread(ksm);
+        } else {
+            kfree(ksm);
+        }
+    }
+}
+#endif
+
 /*
  *	The peer socket should always be NULL (or else). When we call this
  *	function we are destroying the object and from then on nobody
@@ -477,6 +538,12 @@ int inet_release(struct socket *sock)
 		if (sock_flag(sk, SOCK_LINGER) &&
 		    !(current->flags & PF_EXITING))
 			timeout = sk->sk_lingertime;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KNOX_NCM
+		knox_collect_metadata(sock);
+#endif
+>>>>>>> cd46306dd... fixup compile errors
 		sock->sk = NULL;
 		sk->sk_prot->close(sk, timeout);
 	}
@@ -1117,7 +1184,7 @@ static struct inet_protosw inetsw_array[] =
 		.type =       SOCK_DGRAM,
 		.protocol =   IPPROTO_ICMP,
 		.prot =       &ping_prot,
-		.ops =        &inet_dgram_ops,
+		.ops =        &inet_sockraw_ops,
 		.no_check =   UDP_CSUM_DEFAULT,
 		.flags =      INET_PROTOSW_REUSE,
        },
