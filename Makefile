@@ -241,17 +241,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
 
-<<<<<<< HEAD
 HOSTCC       = $(CCACHE) gcc
 HOSTCXX      = $(CCACHE) g++
 HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -Ofast -fomit-frame-pointer -std=gnu89 $(GRAPHITE)
 HOSTCXXFLAGS = -Ofast $(GRAPHITE)
-=======
-HOSTCC	= $(CCACHE) gcc
-HOSTCXX	= $(CCACHE) g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -O2
->>>>>>> 79841392e... makefile
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -391,16 +384,9 @@ KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common -fshort-wchar \
 		   -Werror-implicit-function-declaration \
-<<<<<<< HEAD
 		   -Wno-format-security -Wno-logical-not-parentheses \
 		   -mtune=cortex-a53 \
 		   -std=gnu89 $(call cc-option,-fno-PIE)
-=======
-		   -Wno-format-security \
-		   -fno-delete-null-pointer-checks \
-		   -fdiagnostics-show-option -Werror \
-		   -std=gnu89
->>>>>>> 79841392e... makefile
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
@@ -630,8 +616,6 @@ KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
 KBUILD_CFLAGS	+= -O2 -finline-functions -Wno-maybe-uninitialized
 endif
-
-KBUILD_CFLAGS	+= -mcpu=cortex-a57.cortex-a53+crc+crypto
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
 
