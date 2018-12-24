@@ -538,12 +538,9 @@ int inet_release(struct socket *sock)
 		if (sock_flag(sk, SOCK_LINGER) &&
 		    !(current->flags & PF_EXITING))
 			timeout = sk->sk_lingertime;
-<<<<<<< HEAD
-=======
 #ifdef CONFIG_KNOX_NCM
 		knox_collect_metadata(sock);
 #endif
->>>>>>> cd46306dd... fixup compile errors
 		sock->sk = NULL;
 		sk->sk_prot->close(sk, timeout);
 	}
