@@ -94,7 +94,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
       read -p "${bldblu} Do you want to use a stock or custom built dt.img? (s, c) ${txtrst}" yn
       case $yn in
           # Stock
-          [s]* ) ./mkbootimg --kernel ${KERNELDIR}/out/$device/temp/Image --dt ${KERNELDIR}/dt.img --ramdisk ${KERNELDIR}/out/$device/temp/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/$device/boot.img; break;;
+          [s]* ) ./mkbootimg --kernel ${KERNELDIR}/out/$device/temp/Image --dt ${KERNELDIR}/$device/dt.img --ramdisk ${KERNELDIR}/out/$device/temp/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/$device/boot.img; break;;
           # Custom
           [c]* ) ./mkbootimg --kernel ${KERNELDIR}/out/$device/temp/Image --dt ${KERNELDIR}/out/$device/temp/dt.img --ramdisk ${KERNELDIR}/out/$device/temp/ramdisk.gz --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o ${KERNELDIR}/out/$device/boot.img; break;;
           * ) echo "${bldred} Please answer s/c! ${txtrst}"; echo "";;

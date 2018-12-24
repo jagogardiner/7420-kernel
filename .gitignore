@@ -85,4 +85,7 @@ out
 fips_fmp_utils
 security/selinux_n/av_permissions.h
 security/selinux_n/flask.h
+security/selinux/av_permissions.h
+security/selinux/flask.h
+
 
