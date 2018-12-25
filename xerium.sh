@@ -19,10 +19,10 @@ echo ""
 
 # Set exports for later script use
 echo -e "${bldgrn} Setting exports ${txtrst}"
-export KERNELDIR=/home/nysadev/xeriumO
-export SCRIPTS=/home/nysadev/xeriumO/xscripts
+export KERNELDIR=~/xeriumO
+export SCRIPTS=~/xeriumO/xscripts
 export ARCH=arm64
-export CROSS_COMPILE=/home/nysadev/aarch64-linux-android-6.x/bin/aarch64-linux-android-
+export CROSS_COMPILE=~/aarch64-linux-android-6.x/bin/aarch64-linux-android-
 echo ""
 
 # Clean up
