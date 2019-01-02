@@ -33,20 +33,15 @@ sudo rm -rf out
 echo ""
 
 # Prompt the user what they are building for
-while true; do
-    read -p "${bldblu} What device are you building for? (g920x, g925x, g920t, g925t) ${txtrst}" yn
-    case $yn in
-        # Make for flat
-        [g920x]* ) export device=g920x; export defconfig=zeroflte_defconfig; break;;
-        # Make for edge
-        [g925x]* ) export device=g925x; export defconfig=zerolte_defconfig; break;;
-	# Tmobile flat
-        [g920t]* ) export device=g920t; export defconfig=zeroflte_defconfig; break;;
-	# Tmobile edge
-        [g925t]* ) export device=g925t; export defconfig=zerolte_defconfig; break;;
-        * ) echo "${bldred} Please answer g920/5/t/x! ${txtrst}"; echo "";;
-    esac
-done
+echo "${bldblu} Please choose your device (g920x, g925x, g920t, g925t) ${txtrst}"
+read n
+case $n in
+    g920x) export device=g920x; export defconfig=zeroflte_defconfig;;
+    g925x) export device=g925x; export defconfig=zerolte_defconfig;;
+    g920t) export device=g920t; export defconfig=zeroflte_defconfig;;
+    g925t) export device=g925t; export defconfig=zerolte_defconfig;;
+    *) invalid option;;
+esac
 mkdir -p ${KERNELDIR}/out/${device}
 mkdir -p ${KERNELDIR}/out/${device}/temp
 echo ""
