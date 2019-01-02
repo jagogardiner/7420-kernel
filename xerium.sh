@@ -34,13 +34,17 @@ echo ""
 
 # Prompt the user what they are building for
 while true; do
-    read -p "${bldblu} What device are you building for? (flat, edge) ${txtrst}" yn
+    read -p "${bldblu} What device are you building for? (g920x, g925x, g920t, g925t) ${txtrst}" yn
     case $yn in
         # Make for flat
-        [flat]* ) export device=g920x; export defconfig=zeroflte_defconfig; break;;
+        [g920x]* ) export device=g920x; export defconfig=zeroflte_defconfig; break;;
         # Make for edge
-        [edge]* ) export device=g925x; export defconfig=zerolte_defconfig; break;;
-        * ) echo "${bldred} Please answer flat or edge! ${txtrst}"; echo "";;
+        [g925x]* ) export device=g925x; export defconfig=zerolte_defconfig; break;;
+	# Tmobile flat
+        [g920t]* ) export device=g920t; export defconfig=zeroflte_defconfig; break;;
+	# Tmobile edge
+        [g925t]* ) export device=g925t; export defconfig=zerolte_defconfig; break;;
+        * ) echo "${bldred} Please answer g920/5/t/x! ${txtrst}"; echo "";;
     esac
 done
 mkdir -p ${KERNELDIR}/out/${device}
