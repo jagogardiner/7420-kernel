@@ -37,15 +37,26 @@ while true; do
     read -p "${bldblu} What device are you building for? (flat, edge) ${txtrst}" yn
     case $yn in
         # Make for flat
-        [flat]* ) export device=zeroflte; export defconfig=zeroflte_defconfig; break;;
+        [flat]* ) export device=g920x; export defconfig=zeroflte_defconfig; break;;
         # Make for edge
-        [edge]* ) export device=zerolte; export defconfig=zerolte_defconfig; break;;
+        [edge]* ) export device=g925x; export defconfig=zerolte_defconfig; break;;
         * ) echo "${bldred} Please answer flat or edge! ${txtrst}"; echo "";;
     esac
 done
 mkdir -p ${KERNELDIR}/out/${device}
 mkdir -p ${KERNELDIR}/out/${device}/temp
 echo ""
+
+while true; do
+    read -p "${bldblu} Would you like to build with an experimental ramdisk image? (yes, no) ${txtrst}" yn
+    case $yn in
+        # Make for flat
+        [yes]* ) export ramdisk=${KERNELDIR}/${device}/exp_ramdisk; break;;
+        # Make for edge
+        [no]* ) export ramdisk=${KERNELDIR}/${device}/ramdisk; break;;
+        * ) echo "${bldred} Please answer yes or no! ${txtrst}"; echo "";;
+    esac
+done
 
 # Make configuration
 echo -e "${bldgrn} Making configuration ${txtrst}"
@@ -85,7 +96,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   # Pack ramdisk up
   echo -e "${bldgrn} Packing ramdisk ${txtrst}"
   cd ${SCRIPTS}
-  ./mkbootfs ${KERNELDIR}/${device}/ramdisk | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
+  ./mkbootfs ${ramdisk} | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
   echo ""
 
   # Prompt the user if they want to use a stock dt.img, or custom made from earlier.
