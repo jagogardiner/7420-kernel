@@ -4,12 +4,13 @@ import init.wifi.rc
 import init.baseband.rc
 import init.fac.rc
 import init.exynos7420_fac.rc
-import init.gps.rc
+import init.spectrum.rc
 
 on early-init
     mount debugfs /sys/kernel/debug /sys/kernel/debug
 
 on init
+
     start watchdogd
     mkdir /preload 0771 system system
 
@@ -69,7 +70,6 @@ on post-fs-data
     chown system radio /sys/class/camera/rear/isp_core
     chown system radio /sys/class/camera/rear/fw_update
     chown system radio /sys/class/camera/rear/from_write
-    chown system radio /sys/class/camera/rear/rear_moduleid
     chown system radio /sys/class/camera/flash/rear_flash
     chown media system /sys/class/camera/flash/rear_torch_flash
     chown system radio /sys/class/camera/front/front_camfw
@@ -119,6 +119,13 @@ on post-fs-data
    chown system radio /sys/class/power_supply/battery/batt_discharging_ntc_adc
    chown system radio /sys/class/power_supply/battery/batt_self_discharging_control
    chown system radio /sys/class/power_supply/battery/batt_inbat_wireless_cs100
+
+#Private Mode
+    mkdir /mnt/shell/privatemode 0700 system system
+    mkdir /storage/Private 0000 system system
+    mkdir /data/privatemode 0770 system system
+    chown system system /data/privatemode
+    restorecon /data/privatemode
 
 #NFC : create data/nfc for nv storage
     mkdir /data/nfc 0700 nfc nfc
@@ -359,7 +366,7 @@ on boot
     chmod 0770 /system/bin/rtc_log.sh
     chown system system /system/bin/rtc_log.sh
 
-    chown bluetooth net_bt_stack /dev/ttySAC4
+    chown bluetooth bluetooth /dev/ttySAC4
     chmod 0660 /dev/ttySAC4
 # mobicore
     chmod 0660 /dev/t-base-tui
@@ -395,14 +402,14 @@ on boot
 
 # permissions for bluetooth.
     setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
-    chown bluetooth net_bt_stack ro.bt.bdaddr_path
-    chown radio net_bt_stack /efs/bluetooth/bt_addr
+    chown bluetooth bluetooth ro.bt.bdaddr_path
+    chown radio bluetooth /efs/bluetooth/bt_addr
     chmod 0640 /efs/bluetooth/bt_addr
     chown bluetooth bluetooth /dev/ttySAC4
     chmod 0660 /dev/ttySAC4
     chmod 0660 /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
 
 #for datarouter
     chown system system /dev/dun
@@ -468,6 +475,9 @@ on fs
 # Permissions for gpio_keys
     chown radio system /sys/class/sec/sec_key/wakeup_keys
     write /sys/class/sec/sec_key/wakeup_keys 116,172
+
+# Permissions for hall
+    chown system radio /sys/class/sec/sec_key/hall_irq_ctrl
 
 # Permissions for input_booster
     chown system radio /sys/class/input_booster/level
@@ -712,21 +722,6 @@ on fs
     chown system radio /sys/class/sensors/irled_remote/irled_send
     chown system radio /sys/class/sensors/irled_remote/irled_send_result
 
-# GPS
-    chown root system /dev/ttySAC0
-    chmod 0660 /dev/ttySAC0
-    chown root system /sys/class/sec/gps/GPS_PWR_EN/value
-    chmod 0664 /sys/class/sec/gps/GPS_PWR_EN/value
-    mkdir /data/system 0771 system system
-    chown system system /data/system
-    mkdir /data/system/gps 0771 system system
-    chown system system /data/system/gps
-    rm /data/system/gps/gps_started
-    rm /data/system/gps/glonass_started
-    rm /data/system/gps/beidou_started
-    rm /data/system/gps/smd_started
-    rm /data/system/gps/sv_cno.info
-
 # Copy DRM Key
     copy /system/app/wv.keys /factory/wv.keys
 
@@ -833,27 +828,6 @@ service TvoutService_C /system/bin/bintvoutservice
 on property:ro.SecEDS.enable=false
     stop TvoutService_C
 
-# Secure Storage startup
-service secure_storage /system/bin/secure_storage_daemon
-    class core
-    user system
-    group system
-    disabled
-
-on property:ro.securestorage.support=true
-    mkdir /dev/.secure_storage
-    chmod 0711 /dev/.secure_storage
-    chown system system /dev/.secure_storage
-    restorecon -R /dev/.secure_storage
-    start secure_storage
-
-on property:ro.securestorage.knox=true
-    mkdir /dev/.secure_storage
-    chmod 0711 /dev/.secure_storage
-    chown system system /dev/.secure_storage
-    restorecon -R /dev/.secure_storage
-    start secure_storage
-
 # umount service
 service umount_service /system/bin/umount -D /preload
     disabled
@@ -920,14 +894,6 @@ service DMM-deamon /system/bin/dmm_v2
     class main
     user root
     group root system radio inet net_raw
-    
-# GPS
-service gpsd /vendor/bin/hw/gpsd -c /vendor/etc/gnss/gps.xml
-    class main
-    user gps
-    group system inet net_raw wakelock
-    ioprio be 0
-    seclabel u:r:gpsd:s0
 
 # WSM
 service wsmd /system/bin/wsmd

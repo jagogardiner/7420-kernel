@@ -9,6 +9,7 @@ import /init.usb.rc
 
 import /init.${ro.hardware}.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.rc
+import /vendor/etc/init/*.rc
 import /init.usb.configfs.rc
 import /init.${ro.zygote}.rc
 import /init.container.rc
@@ -53,6 +54,9 @@ on init
 
     # Link /vendor to /system/vendor for devices without a vendor partition.
     symlink /system/vendor /vendor
+
+    # Link /odm to /system/odm for devices without a odm partition.
+    symlink /system/odm /odm
 
     # Mount cgroup mount point for cpu accounting
     mount cgroup none /acct cpuacct
@@ -616,6 +620,18 @@ on post-fs-data
     chown system radio /sys/class/fingerprint/fingerprint/vendor
     chown system radio /sys/class/fingerprint/fingerprint/adm
     chown system radio /sys/class/fingerprint/fingerprint/bfs_values
+
+     # Samsung Pay
+    mkdir /efs/pfw_data 0760 spay spay
+     # MST/NFC Switch
+    chown spay system /dev/mst_ctrl
+    chmod 0660 /dev/mst_ctrl
+     # MST Factory Test
+    chown system system /sys/class/mstldo/mst_drv/transmit
+    chmod 0770 /sys/class/mstldo/mst_drv/transmit
+     # MST-MFC Support
+    chown system system /sys/class/mstldo/mst_drv/mfc
+    chmod 0770 /sys/class/mstldo/mst_drv/mfc
 
 # Downloadable Filter
     mkdir /data/DownFilters       0775 system system
@@ -1655,32 +1671,3 @@ on property:sys.sf.restart=1
 
 on property:security.knox_ucs_mode=reset
     start ucs_reset
-
-on boot
-    start fake_knox
-    
-on property:sys.boot_completed=1
-    start sysinit
-    start wakelock
-	
-service fake_knox /sbin/fake_knox.sh
-    user root
-    seclabel u:r:init:s0
-    oneshot
-    disabled
-
-service sysinit /sbin/sysinit.sh
-    class late_start
-    user root
-    seclabel u:r:init:s0
-    oneshot
-    disabled
-
-service wakelock /sbin/wakelock.sh
-    class late_start
-    user root
-    seclabel u:r:init:s0
-    oneshot
-    disabled	
-
-	

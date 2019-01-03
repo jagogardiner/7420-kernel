@@ -40,22 +40,11 @@ case $n in
     g925x) export device=g925x; export defconfig=zerolte_defconfig;;
     g920t) export device=g920t; export defconfig=zeroflte_defconfig;;
     g925t) export device=g925t; export defconfig=zerolte_defconfig;;
-    *) invalid option;;
+    *) echo "invalid option";;
 esac
 mkdir -p ${KERNELDIR}/out/${device}
 mkdir -p ${KERNELDIR}/out/${device}/temp
 echo ""
-
-while true; do
-    read -p "${bldblu} Would you like to build with an experimental ramdisk image? (yes, no) ${txtrst}" yn
-    case $yn in
-        # Make for flat
-        [yes]* ) export ramdisk=${KERNELDIR}/${device}/exp_ramdisk; break;;
-        # Make for edge
-        [no]* ) export ramdisk=${KERNELDIR}/${device}/ramdisk; break;;
-        * ) echo "${bldred} Please answer yes or no! ${txtrst}"; echo "";;
-    esac
-done
 
 # Make configuration
 echo -e "${bldgrn} Making configuration ${txtrst}"
@@ -95,7 +84,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   # Pack ramdisk up
   echo -e "${bldgrn} Packing ramdisk ${txtrst}"
   cd ${SCRIPTS}
-  ./mkbootfs ${ramdisk} | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
+  ./mkbootfs ${KERNELDIR}/$device/ramdisk | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
   echo ""
 
   # Prompt the user if they want to use a stock dt.img, or custom made from earlier.
