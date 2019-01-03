@@ -22,7 +22,7 @@ echo -e "${bldgrn} Setting exports ${txtrst}"
 export KERNELDIR=~/xeriumO
 export SCRIPTS=~/xeriumO/xscripts
 export ARCH=arm64
-export CROSS_COMPILE=~/aarch64-linux-android-6.x/bin/aarch64-linux-android-
+export CROSS_COMPILE=~/aarch64-linux-android-8.x/bin/aarch64-linux-gnu-
 echo ""
 
 # Clean up
