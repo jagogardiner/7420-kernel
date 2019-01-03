@@ -22,7 +22,7 @@ echo -e "${bldgrn} Setting exports ${txtrst}"
 export KERNELDIR=~/xeriumO
 export SCRIPTS=~/xeriumO/xscripts
 export ARCH=arm64
-export CROSS_COMPILE=~/aarch64-linux-android-6.x/bin/aarch64-linux-android-
+export CROSS_COMPILE=~/aarch64-linux-android-7.3.2/bin/aarch64-linux-gnu-
 echo ""
 
 # Clean up
@@ -33,19 +33,29 @@ sudo rm -rf out
 echo ""
 
 # Prompt the user what they are building for
-while true; do
-    read -p "${bldblu} What device are you building for? (flat, edge) ${txtrst}" yn
-    case $yn in
-        # Make for flat
-        [flat]* ) export device=zeroflte; export defconfig=zeroflte_defconfig; break;;
-        # Make for edge
-        [edge]* ) export device=zerolte; export defconfig=zerolte_defconfig; break;;
-        * ) echo "${bldred} Please answer flat or edge! ${txtrst}"; echo "";;
-    esac
-done
+echo "${bldblu} Please choose your device (g920x, g925x, g920t, g925t) ${txtrst}"
+read n
+case $n in
+    g920x) export device=g920x; export defconfig=zeroflte_defconfig;;
+    g925x) export device=g925x; export defconfig=zerolte_defconfig;;
+    g920t) export device=g920t; export defconfig=zeroflte_defconfig;;
+    g925t) export device=g925t; export defconfig=zerolte_defconfig;;
+    *) invalid option;;
+esac
 mkdir -p ${KERNELDIR}/out/${device}
 mkdir -p ${KERNELDIR}/out/${device}/temp
 echo ""
+
+while true; do
+    read -p "${bldblu} Would you like to build with an experimental ramdisk image? (yes, no) ${txtrst}" yn
+    case $yn in
+        # Make for flat
+        [yes]* ) export ramdisk=${KERNELDIR}/${device}/exp_ramdisk; break;;
+        # Make for edge
+        [no]* ) export ramdisk=${KERNELDIR}/${device}/ramdisk; break;;
+        * ) echo "${bldred} Please answer yes or no! ${txtrst}"; echo "";;
+    esac
+done
 
 # Make configuration
 echo -e "${bldgrn} Making configuration ${txtrst}"
@@ -85,7 +95,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   # Pack ramdisk up
   echo -e "${bldgrn} Packing ramdisk ${txtrst}"
   cd ${SCRIPTS}
-  ./mkbootfs ${KERNELDIR}/${device}/ramdisk | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
+  ./mkbootfs ${ramdisk} | gzip > ${KERNELDIR}/out/$device/temp/ramdisk.gz
   echo ""
 
   # Prompt the user if they want to use a stock dt.img, or custom made from earlier.
