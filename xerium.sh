@@ -33,13 +33,14 @@ sudo rm -rf out
 echo ""
 
 # Prompt the user what they are building for
-echo "${bldblu} Please choose your device (g920x, g925x, g920t, g925t) ${txtrst}"
+echo "${bldblu} Please choose your device (g920x, g925x, g920t, g925t, n920x) ${txtrst}"
 read n
 case $n in
     g920x) export device=g920x; export defconfig=zeroflte_defconfig;;
     g925x) export device=g925x; export defconfig=zerolte_defconfig;;
     g920t) export device=g920t; export defconfig=zeroflte_defconfig;;
     g925t) export device=g925t; export defconfig=zerolte_defconfig;;
+    n920x) export device=n920x; export defconfig=noblelte_defconfig;;
     *) echo "invalid option";;
 esac
 mkdir -p ${KERNELDIR}/out/${device}
