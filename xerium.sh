@@ -40,7 +40,7 @@ case $n in
     g925x) export device=g925x; export defconfig=zerolte_defconfig;;
     g920t) export device=g920t; export defconfig=zeroflte_defconfig;;
     g925t) export device=g925t; export defconfig=zerolte_defconfig;;
-    *) echo "invalid option";;
+    *) echo "invalid option"; exit 0;;
 esac
 mkdir -p ${KERNELDIR}/out/${device}
 mkdir -p ${KERNELDIR}/out/${device}/temp
@@ -107,7 +107,7 @@ if [ -e $KERNELDIR/arch/arm64/boot/Image ]; then
   cd ${KERNELDIR}/out/${device}
   zip -r xeriumO-${device}-`date +[%d-%m-%y]`.zip . -x \*temp\*
   sudo rm -rf ${KERNELDIR}/out/${device}/temp
-  echo -e "${bldcya} DONE! Find the kernel in /out/${device}/*.zip ${txtrst}"
+  echo -e "${bldcya} DONE! Find the kernel in ${KERNELDIR}/out/${device}/*.zip ${txtrst}"
   echo -e "${bldcya} Xerium kernel for the S6 ${txtrst}"
   echo -e "${bldcya} Script made by nysadev ${txtrst}"
 
